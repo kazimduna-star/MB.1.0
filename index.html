@@ -1,0 +1,48 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Лунные равнины</title>
+<div id="err" style="display:none;position:fixed;z-index:9;left:10px;right:10px;top:30%;padding:14px;background:#7a1530ee;border-radius:14px;font-size:14px;line-height:1.4"></div>
+<script>window.showErr=t=>{const e=document.getElementById("err");e.style.display="block";e.textContent="⚠ "+t};addEventListener("error",e=>window.showErr((e.message||"ошибка загрузки")+" — проверь, что index.html, game.js и anim.js лежат в одной папке, и открой через ссылку GitHub Pages"),true)</script>
+<script type="importmap">{"imports":{"three":"https://esm.sh/three@0.160.0"}}</script>
+<style>
+:root{color-scheme:dark;--g:#ffd36e;--gl:rgba(13,22,49,.74)}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#101b3b;color:#fff;font-family:system-ui,sans-serif;touch-action:none}
+canvas{position:fixed;inset:0;display:block}button{font:inherit;color:#fff;border:1px solid #fff5;background:#ffffff18;border-radius:14px;padding:10px 14px}
+.panel{background:var(--gl);border:1px solid #fff4;backdrop-filter:blur(10px);border-radius:16px;padding:10px 13px}
+#hud{position:fixed;z-index:3;top:max(env(safe-area-inset-top),10px);left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none}#hud button{pointer-events:auto}
+.m{height:7px;background:#fff3;border-radius:6px;margin:4px 0 7px;overflow:hidden;min-width:170px}.m i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff718a,#ffc08b)}#sb i{background:linear-gradient(90deg,#4ce2a1,#d5ff8a)}
+#toast{position:fixed;z-index:4;top:20%;left:50%;transform:translateX(-50%);opacity:0;transition:.25s;background:#101a3be8;padding:10px 20px;border-radius:22px;border:1px solid #fff5;pointer-events:none}#toast.s{opacity:1}
+#ctl{position:fixed;z-index:3;bottom:max(env(safe-area-inset-bottom),16px);left:14px;right:14px;display:flex;justify-content:space-between;align-items:end;pointer-events:none}
+#stick{width:124px;height:124px;border-radius:50%;background:#ffffff18;border:1px solid #fff5;position:relative;pointer-events:auto;display:none}#nub{position:absolute;width:48px;height:48px;left:38px;top:38px;border-radius:50%;background:linear-gradient(135deg,#fff,#9dbfff)}
+.ac{display:flex;gap:10px;pointer-events:auto}.ac button{width:66px;height:66px;border-radius:50%;padding:4px;background:#182b56dd}.ac .b{width:80px;height:80px;background:#69465bdd;border-color:#ffd36e99}
+@media(pointer:coarse){#stick{display:block}#hp2{display:none}}
+#boot{position:fixed;z-index:8;left:14px;right:14px;bottom:max(env(safe-area-inset-bottom),12px);padding:9px 13px;background:#0b1431f2;border:1px solid #ffd36e77;border-radius:14px;font-size:14px;text-align:center}#boot .m{margin:6px 0 0;min-width:0}#boot i{background:linear-gradient(90deg,#ffb45e,#ff6d76);transition:width .15s}.bx{padding-bottom:84px!important}
+#menu{position:fixed;z-index:5;inset:0;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(0deg,#071027ee 5%,#07102700 65%);overflow:auto}
+.bx{width:min(620px,96vw);padding:16px 16px 22px;text-align:center}h1{font:400 clamp(34px,8vw,56px)/1 Georgia,serif;margin:0 0 8px;background:linear-gradient(90deg,#fff,#ffd36e,#a9caff);color:transparent;background-clip:text}
+#cards,#qual{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:9px 0}.card{min-width:120px;background:var(--gl)}.card i{display:block;font-style:normal;font-size:26px}.on{border-color:var(--g);background:#ffd36e30}
+.pr{background:linear-gradient(135deg,#ffb45e,#ff6d76);border:0;font-size:18px;font-weight:700;padding:13px 38px;border-radius:30px;margin-top:8px}.pr:disabled{opacity:.5}
+label{font-size:13px;opacity:.85;display:block;margin-top:6px}input[type=range]{width:70%}#ld{min-height:20px;font-size:13px;color:#ffd36e}
+
+#menu{align-items:flex-end;background:radial-gradient(120% 80% at 50% 110%,#1b2b6bf0 0%,#0a123a99 45%,#0000 75%),linear-gradient(0deg,#050a22ee,#0000 70%)}
+.bx{padding-bottom:max(env(safe-area-inset-bottom),26px)}.lg{letter-spacing:.5em;font-size:12px;color:#ffd36e;text-shadow:0 0 12px #ffd36e;margin-bottom:6px}
+h1{font-size:clamp(40px,11vw,76px);letter-spacing:.04em;filter:drop-shadow(0 0 22px #7fa8ff99);animation:fl 5s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-6px);filter:drop-shadow(0 0 34px #ffd36eaa)}}
+.sb{font-size:14px;opacity:.75;letter-spacing:.3em;margin-bottom:14px}
+.card{border-radius:18px;background:linear-gradient(160deg,#ffffff26,#6f8cff14);border:1px solid #ffffff55;backdrop-filter:blur(12px);transition:.2s}.card.on{border-color:#ffd36e;box-shadow:0 0 22px #ffd36e66;background:linear-gradient(160deg,#ffd36e44,#ff6d7622)}
+.pr{position:relative;overflow:hidden;min-width:min(300px,80vw);padding:16px 44px;font:600 22px Georgia,serif;letter-spacing:.35em;text-indent:.35em;color:#fff;border-radius:40px;background:linear-gradient(135deg,#ffffff2e,#ffb45e30 50%,#ff6d7630);border:1.5px solid #ffe2a6cc;backdrop-filter:blur(14px);box-shadow:0 0 30px #ffb45e66,inset 0 0 22px #ffffff2a;text-shadow:0 0 14px #ffd36e;margin:12px 0 8px;transition:.2s}
+.pr::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,#0000,#ffffff77,#0000);transform:skewX(-20deg);animation:sh 3s infinite}@keyframes sh{to{left:130%}}.pr:active{transform:scale(.95)}.pr:disabled{opacity:.45}
+.set{margin-top:8px;font-size:13px;opacity:.9}.set summary{cursor:pointer;padding:6px;list-style:none;opacity:.8}
+.ac button{width:66px;height:66px;font-size:25px;line-height:1;border-radius:50%;padding:0;backdrop-filter:blur(8px);background:radial-gradient(circle at 30% 25%,#bfe6ff66,#4b6cff22 62%,#fff1);border:1.5px solid #bfe3ffaa;box-shadow:0 0 18px #6fb4ff66,inset 0 0 14px #ffffff2a;transition:transform .12s,box-shadow .12s}.ac button:active{transform:scale(.88);box-shadow:0 0 34px #9fe8ffdd}
+.ac .b{width:82px;height:82px;font-size:30px;background:radial-gradient(circle at 30% 25%,#ffd7a066,#ff6d7633 62%,#fff1);border-color:#ffd36ecc;box-shadow:0 0 22px #ffb45e77,inset 0 0 14px #ffffff2a}
+#skill{background:radial-gradient(circle at 30% 25%,#e2b8ff66,#8a4bff33 62%,#fff1)!important;border-color:#d8b0ffcc!important;box-shadow:0 0 18px #b06fff77!important}#jump{background:radial-gradient(circle at 30% 25%,#b8ffd966,#2fd68a33 62%,#fff1)!important;border-color:#a6ffd0cc!important;box-shadow:0 0 18px #4cf0a077!important}
+#ult{font-size:22px!important;border-color:#ff6d76cc!important;background:radial-gradient(circle at 30% 25%,#ff9aa866,#ff3d6e33 62%,#fff1)!important}#ult small{display:block;font-size:10px;margin-top:-2px}#ult.rdy{animation:rd 1s infinite}@keyframes rd{50%{box-shadow:0 0 38px #ff6d76,inset 0 0 18px #fff6}}
+#pause{border-radius:50%;width:46px;height:46px;padding:0;background:#ffffff1f;backdrop-filter:blur(8px)}
+.sk{position:fixed;z-index:4;bottom:-10px;width:5px;height:5px;border-radius:50%;background:#ffe9a8;box-shadow:0 0 10px #ffd36e;animation:up linear infinite;pointer-events:none}@keyframes up{to{transform:translateY(-110vh) translateX(30px);opacity:0}}
+</style></head><body>
+<div id="hud"><div class="panel">💎 <b id="gems">0</b>/8 &nbsp;👾 <b id="kills">0</b><div style="font-size:12px;opacity:.8;margin-top:6px">Здоровье</div><div class="m"><i id="hp"></i></div><div style="font-size:12px;opacity:.8">Выносливость</div><div class="m" id="sb"><i id="st"></i></div></div><button class="panel" id="pause">Ⅱ</button></div>
+<div id="toast"></div>
+<div id="ctl"><div id="stick"><div id="nub"></div></div><div class="ac"><button id="jump">⤒</button><button id="skill">✦</button><button id="ult">💥<small>0%</small></button><button class="b" id="attack">⚔</button></div></div>
+<div id="menu"><div class="bx"><div class="lg">✦ LUNAR PLAINS ✦</div><h1>Лунные равнины</h1><div class="sb">под светом двух лун</div>
+<div id="cards"></div><div id="ld"></div>
+<button class="pr" id="start" disabled>Играть</button>
+<details class="set"><summary>⚙ Настройки</summary><label>Качество графики</label><div id="qual"></div><label>Зум камеры</label><input type="range" id="zoom" min="1.6" max="8" step=".1" value="3.2">
+<div id="hp2" style="font-size:12px;opacity:.6;margin-top:6px">WASD · Shift бег · Пробел прыжок · J удар · E навык · R ультимейт</div></details></div></div>
+<div id="boot"><span id="bt">Загрузка библиотек…</span><div class="m"><i id="bi" style="width:3%"></i></div></div>
+<script>for(let i=0;i<16;i++){const s=document.createElement("b");s.className="sk";s.style.cssText=`left:${Math.random()*100}%;animation-duration:${6+Math.random()*8}s;animation-delay:-${Math.random()*10}s`;document.body.append(s)}</script>
+<script type="module" src="game.js"></script></body></html>
